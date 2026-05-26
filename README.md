@@ -1,8 +1,8 @@
-# Your Project Name
+# Jeu 2048
 
 | | |
 |-|-|
-|`Author` | Iustina
+|`Author` | Iustina Boiță
 
 ## Description
 
