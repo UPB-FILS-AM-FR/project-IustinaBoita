@@ -6,9 +6,18 @@
 
 ## Description
 
+
+
+
 ## Motivation
 
+
+
+
 ## Architecture
+
+
+
 
 ### Block diagram
 
@@ -17,7 +26,8 @@
 
 ### Schematic
 
-![Schematic](schematics/kicad_schematic.png)
+<img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/53d206f6-0ff0-4a28-9b3e-615e2098d1f2" />
+
 
 ### Components
 
