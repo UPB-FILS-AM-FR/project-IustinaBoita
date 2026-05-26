@@ -21,8 +21,8 @@
 
 ### Block diagram
 
-<!-- Make sure the path to the picture is correct -->
-![Block Diagram](schematics/block_diagram.png)
+<img width="2800" height="2126" alt="Block Diagram - joc" src="https://github.com/user-attachments/assets/0269576a-a1c3-47c2-b73c-82a179396e63" />
+
 
 ### Schematic
 
