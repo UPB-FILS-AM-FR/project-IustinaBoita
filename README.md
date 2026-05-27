@@ -5,9 +5,9 @@
 |`Author` | Iustina Boiță
 
 ## Description
-
-
-
+Mon projet est une recréation du jeu 2048, un jeu où, grâce à certaines commandes, les multiples de 2 s'additionnent pour former des nombres plus grands. Le but du jeu est de faire un maximum de paires de nombres qui fusionnent pour atteindre le score le plus élevé possible. Je l'ai adapté de manière à ce que le joueur puisse contrôler le jeu par les mouvements de la main (sur les axes haut-bas et droite-gauche), sans avoir à appuyer sur un bouton pour déplacer les nombres. Chaque mouvement déclenchera un signal sonore (un bip) provenant d'un buzzer connecté. Chaque niveau a un objectif à atteindre : si le joueur passe au niveau suivant, le buzzer émet deux bips courts, et si le joueur remplit la grille et qu'aucune autre action n'est possible, la partie se termine et le jeu émet trois bips. 
+Le joueur peut réinitialiser la partie en appuyant sur la touche « R » s'il souhaite recommencer le niveau depuis le début. Chaque score est sauvegardé. 
+De plus, chaque mouvement, niveau, score ou information est affiché en temps réel sur l'écran pendant le jeu.
 
 ## Motivation
 
