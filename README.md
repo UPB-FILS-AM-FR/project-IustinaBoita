@@ -53,14 +53,16 @@ Le système du jeu reste dans cet état de surveillance continue, tout en étant
 ### Components
 
 
-<!-- This is just an example, fill in with your actual components -->
-
 | Device | Usage | Price |
 |--------|--------|-------|
-| Activ Buzzer | Buzzer | [1.5 RON](https://www.optimusdigital.ro/ro/audio-buzzere/635-buzzer-activ-de-3-v.html?search_query=buzzer&results=61) |
-| Push Button | Button | [1 RON](https://www.optimusdigital.ro/ro/butoane-i-comutatoare/1119-buton-6x6x6.html?search_query=buton&results=222) |
-| Jumper Wires | Connecting components | [7 RON](https://www.optimusdigital.ro/ro/fire-fire-mufate/884-set-fire-tata-tata-40p-10-cm.html?search_query=set+fire&results=110) |
-| Breadboard | Project board | [10 RON](https://www.optimusdigital.ro/ro/prototipare-breadboard-uri/8-breadboard-830-points.html?search_query=breadboard&results=145) |
+| Arduino Nano | Carte de contrôle principale qui exécute la logique du jeu 2048 et traite les données de mouvement | [24,99 RON](https://www.optimusdigital.ro/ro/compatibile-cu-arduino-nano/1686-placa-de-dezvoltare-compatibila-cu-arduino-nano-atmega328p-i-ch340.html?search_query=arduino+nano&results=19) |
+| Active Buzzer | Génère des effets sonores (bips) pour les mouvements valides, les passages de niveau (level-ups) et la fin de partie | [2,99 RON](https://www.optimusdigital.ro/ro/audio-buzzere/10-modul-cu-buzzer-activ.html?search_query=buzzer+activ&results=14) |
+| Male-Male Jumper Wires (40p, 10 cm) | Connexion des composants aux broches du capteur accéléromètre vers l'Arduino Nano ou la breadboard | [4,99 RON](https://www.optimusdigital.ro/ro/fire-fire-mufate/884-set-fire-tata-tata-40p-10-cm.html?search_query=tata+tata&results=533) |
+| Female-Male Jumper Wires (40p, 30 cm) | Connexion des composants entre le buzzer et les broches de l'Arduino Nano ou la breadboard | [9,99 RON](https://www.optimusdigital.ro/ro/fire-fire-mufate/878-set-fire-mama-tata-40p-30-cm.html?search_query=mama+tata&results=66) |
+| MMA8452 Digital Accelerometer | Capteur de mouvement qui détecte les angles d'inclinaison pour envoyer des commandes directionnelles (Haut/Bas/Gauche/Droite) | [14,99 RON](https://www.optimusdigital.ro/ro/senzori-senzori-inertiali/748-modul-accelerometru-digital-mma8452.html?search_query=accelerometru&results=45) |
+| Breadboard (400 points) | Carte de projet | [4,56 RON](https://www.optimusdigital.ro/ro/prototipare-breadboard-uri/44-breadboard-400-points.html?search_query=bread&results=94) |
+
+
 
 ### Libraries
 
