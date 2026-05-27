@@ -70,26 +70,24 @@ Le système du jeu reste dans cet état de surveillance continue, tout en étant
 
 | Library | Description | Usage |
 |---------|-------------|-------|
-| [lib-name1](link-to-lib) | official description of the lib | Used for accesing the peripherals of the microcontroller  |
-| [lib-name2](link-to-lib) | official description of the lib | Used for accesing the peripherals of the microcontroller  |
+| [Wire.h](https://github.com/arduino/ArduinoCore-avr/tree/master/libraries/Wire) | Library for Arduino hardware | Utilisé pentru accesarea perifericului I2C al microcontrôleurului afin de lire les données d'accélération brutes du capteur MMA8452 |
+| [Arduino](https://github.com/arduino/ArduinoCore-avr) | Bibliothèque principale contenant l'API de base pour tous les composants matériels Arduino | Utilisé pour accéder aux périphériques de base du microcontrôleur et aux fonctions centrales telles que les GPIO (contrôle du buzzer), la liaison série matérielle (communication avec le PC), les minuteurs (délais) et le générateur de nombres pseudo-aléatoires |
 
 ## Log
 
-<!-- write every week your progress here -->
-
 ### Week 6 - 12 May
+Achat des éléments nécessaires et conception du projet
 
 ### Week 7 - 19 May
+L'assemblage
 
 ### Week 20 - 26 May
+Codage et vérification des derniers détails
 
 
 ## Reference links
 
-<!-- Fill in with appropriate links and link titles -->
 
-[Tutorial 1](https://www.youtube.com/watch?v=wdgULBpRoXk&t=1s&ab_channel=BenEater)
-
-[Article 1](https://www.explainthatstuff.com/induction-motors.html)
-
-[Link title](https://projecthub.arduino.cc/)
+[KiCad]((https://www.kicad.org/))
+[Block Diagram]([https://docs.arduino.cc/](https://www.youtube.com/watch?v=v7_3L-ueOCY&t=176s))
+[Arduino](https://docs.arduino.cc/)
