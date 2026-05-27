@@ -1,0 +1,231 @@
+#include <Wire.h> 
+#define DIMENSIUNE 4
+
+const int pinBuzzer = 8;
+int ADRESA_SENZOR = 0x1D; 
+
+int matrice[DIMENSIUNE][DIMENSIUNE];
+int scor = 0, nivel = 1, tintaNivel = 16, celMaiMareScor = 0;
+
+int32_t xCalibrat = 0;
+int32_t yCalibrat = 0;
+bool blocatMiscare = false; 
+
+void initializareJoc();
+void adaugaNumarAleatoriu();
+void afiseazaMatrice();
+void verificaStareJoc();
+bool muta(int dirX, int dirY);
+
+void setup() {
+  Serial.begin(9600);
+  Wire.begin(); 
+  
+  pinMode(pinBuzzer, OUTPUT);
+  digitalWrite(pinBuzzer, HIGH);
+
+  Wire.beginTransmission(ADRESA_SENZOR);
+  if (Wire.endTransmission() != 0) ADRESA_SENZOR = 0x1C;
+
+  Wire.beginTransmission(ADRESA_SENZOR);
+  Wire.write(0x2A); Wire.write(0x01);
+  Wire.endTransmission();
+
+  randomSeed(analogRead(0));
+
+  Serial.println("Jocul meu 2048. Ești gata?");
+  Serial.println("Ține placa drept si nemișcată timp de 2 secunde...");
+  delay(1000);
+  
+  int32_t sumaX = 0, sumaY = 0;
+  int citiri = 20;
+  
+  for(int i = 0; i < citiri; i++) {
+    Wire.beginTransmission(ADRESA_SENZOR);
+    Wire.write(0x01);
+    Wire.endTransmission(false);
+    Wire.requestFrom(ADRESA_SENZOR, 4);
+    if (Wire.available() >= 4) {
+      sumaX += (int8_t)Wire.read(); Wire.read();
+      sumaY += (int8_t)Wire.read(); Wire.read();
+    }
+    delay(50);
+  }
+  
+  xCalibrat = sumaX / citiri;
+  yCalibrat = sumaY / citiri;
+  Serial.println("\n");
+  Serial.println("Începe jocul!");
+
+  initializareJoc();
+}
+
+void loop() {
+  Wire.beginTransmission(ADRESA_SENZOR);
+  Wire.write(0x01);
+  Wire.endTransmission(false);
+  Wire.requestFrom(ADRESA_SENZOR, 4);
+
+  if (Wire.available() >= 4) {
+    int8_t xRaw = Wire.read(); Wire.read();
+    int8_t yRaw = Wire.read(); Wire.read();
+    
+    int x = xRaw - xCalibrat;
+    int y = yRaw - yCalibrat;
+
+    int pragBust = 30;     
+    int pragRevenire = 18;  
+
+    if (blocatMiscare) {
+      if (abs(x) < pragRevenire && abs(y) < pragRevenire) {
+        blocatMiscare = false;
+      }
+    } 
+    else {
+      bool mutareEfectuata = false;
+
+      if (abs(x) > abs(y)) {
+        if (x > pragBust)      {
+           Serial.println("\n[Mișcare] -> JOS");     
+           mutareEfectuata = muta(1, 0); 
+           }
+        else if (x < -pragBust) { 
+          Serial.println("\n[Mișcare] -> SUS");     
+          mutareEfectuata = muta(-1, 0); 
+          }
+      } else {
+        if (y > pragBust)       { 
+          Serial.println("\n[Mișcare] -> DREAPTA");  
+          mutareEfectuata = muta(0, 1);
+           }
+        else if (y < -pragBust) { 
+          Serial.println("\n[Mișcare] -> STANGA"); 
+          mutareEfectuata = muta(0, -1); 
+          }
+      }
+
+      if (mutareEfectuata) {
+        digitalWrite(pinBuzzer, LOW); delay(60); digitalWrite(pinBuzzer, HIGH); 
+        
+        adaugaNumarAleatoriu();
+        afiseazaMatrice();
+        verificaStareJoc();
+        
+        blocatMiscare = true; 
+      }
+    }
+  }
+
+  if (Serial.available() > 0 && tolower(Serial.read()) == 'r') {
+    Serial.println("\n[RESET] Jocul pornește de la capăt!");
+    initializareJoc();
+  }
+  delay(30);
+}
+
+
+void initializareJoc() {
+  for (int i = 0; i < DIMENSIUNE; i++) 
+    for (int j = 0; j < DIMENSIUNE; j++) matrice[i][j] = 0;
+    
+  scor = 0;
+  blocatMiscare = false;
+  adaugaNumarAleatoriu(); adaugaNumarAleatoriu();
+
+  Serial.print("   Record salvat: "); Serial.println(celMaiMareScor);
+  afiseazaMatrice();
+}
+
+void adaugaNumarAleatoriu() {
+  int libereX[16], libereY[16], nr = 0;
+  for (int i = 0; i < DIMENSIUNE; i++)
+    for (int j = 0; j < DIMENSIUNE; j++)
+      if (matrice[i][j] == 0) { libereX[nr] = i; libereY[nr] = j; nr++; }
+      
+  if (nr > 0) {
+    int index = random(0, nr);
+    matrice[libereX[index]][libereY[index]] = (random(0, 10) == 0) ? 4 : 2;
+  }
+}
+
+bool muta(int dirX, int dirY) {
+  bool mutat = false;
+  int startX = (dirX == 1) ? DIMENSIUNE - 1 : 0;
+  int startY = (dirY == 1) ? DIMENSIUNE - 1 : 0;
+  int pasX = (dirX == 1) ? -1 : 1;
+  int pasY = (dirY == 1) ? -1 : 1;
+
+  for (int repetari = 0; repetari < DIMENSIUNE; repetari++) {
+    for (int i = startX; i >= 0 && i < DIMENSIUNE; i += pasX) {
+      for (int j = startY; j >= 0 && j < DIMENSIUNE; j += pasY) {
+        int urmX = i + dirX;
+        int urmY = j + dirY;
+
+        if (urmX >= 0 && urmX < DIMENSIUNE && urmY >= 0 && urmY < DIMENSIUNE && matrice[i][j] != 0) {
+          if (matrice[urmX][urmY] == 0) {
+            matrice[urmX][urmY] = matrice[i][j];
+            matrice[i][j] = 0;
+            mutat = true;
+          } else if (matrice[urmX][urmY] == matrice[i][j]) {
+            matrice[urmX][urmY] *= 2;
+            scor += matrice[urmX][urmY];
+            matrice[i][j] = 0;
+            mutat = true;
+          }
+        }
+      }
+    }
+  }
+  return mutat;
+}
+
+void verificaStareJoc() {
+  for (int i = 0; i < DIMENSIUNE; i++) {
+    for (int j = 0; j < DIMENSIUNE; j++) {
+      if (matrice[i][j] >= tintaNivel) {
+        nivel++;
+        if (nivel == 2) tintaNivel = 64;
+        else if (nivel == 3) tintaNivel = 128;
+        else if (nivel == 4) tintaNivel = 512;
+        else {
+          Serial.println("🏆 JOC CÂȘTIGAT COMPLET!");
+          
+          for(int b = 0; b < 3; b++) {
+            digitalWrite(pinBuzzer, LOW); delay(150);
+            digitalWrite(pinBuzzer, HIGH); delay(100);
+          }
+          
+          nivel = 1; tintaNivel = 16; initializareJoc(); return;
+        }
+        
+        Serial.print("Treci la nivelul urmator! Nivelul: "); Serial.println(nivel);
+        
+        for(int b = 0; b < 2; b++) {
+          digitalWrite(pinBuzzer, LOW); delay(100);
+          digitalWrite(pinBuzzer, HIGH); delay(80);
+        }
+        
+        return;
+      }
+    }
+  }
+  for (int i = 0; i < DIMENSIUNE; i++)
+    for (int j = 0; j < DIMENSIUNE; j++)
+      if (matrice[i][j] == 0) return; 
+
+  if (scor > celMaiMareScor) celMaiMareScor = scor;
+  Serial.println("GAME OVER! Ia de la capat");
+  initializareJoc();
+}
+
+void afiseazaMatrice() {
+  Serial.print("NIVEL: "); Serial.print(nivel); Serial.print(" | TINTA: "); Serial.println(tintaNivel);
+  Serial.print("Scor: "); Serial.print(scor); Serial.print(" | Record: "); Serial.println(celMaiMareScor);
+  for (int i = 0; i < DIMENSIUNE; i++) {
+    for (int j = 0; j < DIMENSIUNE; j++) {
+      if (matrice[i][j] == 0) Serial.print(". \t");
+      else { Serial.print(matrice[i][j]); Serial.print("\t"); }
+    }
+    Serial.println("\n");
+  }
+}
